@@ -108,10 +108,10 @@
             </objects>
             <point key="canvasLocation" x="26.717557251908396" y="3.5211267605633805"/>
         </scene>
-        <!--View Controller-->
+        <!--To Do Details View Controller-->
         <scene sceneID="qdR-Z1-meg">
             <objects>
-                <viewController id="mj2-Qo-aXq" sceneMemberID="viewController">
+                <viewController id="mj2-Qo-aXq" customClass="ToDoDetailsViewController" customModule="ToDoListApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PsV-pE-5Yu">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -178,6 +178,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="ao8-LK-uHa"/>
+                    <connections>
+                        <outlet property="bodyTextView" destination="ZZh-bD-iGk" id="Vau-ng-qaE"/>
+                        <outlet property="bodyTextViewHeight" destination="oEt-sr-HtL" id="Gam-29-K3T"/>
+                        <outlet property="dateLabel" destination="Lh4-8U-hJJ" id="oa4-Eo-f2V"/>
+                        <outlet property="scrollView" destination="cYX-Ik-eBo" id="pMv-OO-YPC"/>
+                        <outlet property="titleTextView" destination="l2O-3o-zXl" id="akC-i2-0Wu"/>
+                        <outlet property="titleTextViewHeight" destination="UfX-37-4uf" id="1bU-wZ-dtL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rog-Nh-r19" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
