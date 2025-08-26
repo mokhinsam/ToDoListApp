@@ -17,6 +17,7 @@ class ToDoListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        
     }
 
     @IBAction func addButtonDidPressed(_ sender: UIButton) {
