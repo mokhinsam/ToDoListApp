@@ -30,8 +30,8 @@ class StorageManager {
         for todo in todos {
             let cdTodo = CDTodo(context: viewContext)
             cdTodo.title = todo.todo
-            cdTodo.body = todo.note
-            cdTodo.date = todo.date
+            cdTodo.body = ""
+            cdTodo.date = "01/01/25"
             cdTodo.completed = todo.completed
         }
         saveContext()

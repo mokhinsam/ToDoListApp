@@ -29,6 +29,10 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
         guard let todo = dataStore?.todos[indexPath.row] else { return }
         router.openToDoDetailsViewController(with: todo)
     }
+    
+    func didTapAddButton() {
+        router.openToDoDetailsViewController()
+    }
 }
 
 // MARK: - ToDoListInteractorOutputProtocol

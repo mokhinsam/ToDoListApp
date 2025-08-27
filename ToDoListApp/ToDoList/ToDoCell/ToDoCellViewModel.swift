@@ -36,7 +36,7 @@ class ToDoCellViewModel: ToDoCellViewModelProtocol {
     }
     
     var todoDate: String {
-        todo.date ?? "01/01/01"
+        todo.date ?? ""
     }
     
     var todoDoneButton: String {

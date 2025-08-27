@@ -11,7 +11,5 @@ struct Todos: Decodable {
 
 struct Todo: Decodable {
     let todo: String
-    let note: String?
-    let date: String?
     let completed: Bool
 }

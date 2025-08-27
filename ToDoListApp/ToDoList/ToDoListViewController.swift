@@ -15,6 +15,7 @@ protocol ToDoListViewOutputProtocol {
     init(view: ToDoListViewInputProtocol)
     func viewDidLoad()
     func didTapCell(at indexPath: IndexPath)
+    func didTapAddButton()
 }
 
 class ToDoListViewController: UIViewController {
@@ -36,8 +37,16 @@ class ToDoListViewController: UIViewController {
         presenter.viewDidLoad()
     }
 
-    @IBAction func addButtonDidPressed(_ sender: UIButton) {
-        performSegue(withIdentifier: "fromToDoListToToDoDetails", sender: self)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let todoDetailsVC = segue.destination as? ToDoDetailsViewController else {
+            return
+        }
+        let configurator: ToDoDetailsConfiguratorInputProtocol = ToDoDetailsConfigurator()
+        configurator.configure(withView: todoDetailsVC, and: sender as! CDTodo)
+    }
+
+    @IBAction func addButtonDidPressed() {
+        presenter.didTapAddButton()
     }
     
 }

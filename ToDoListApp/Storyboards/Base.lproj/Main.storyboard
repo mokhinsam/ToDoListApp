@@ -102,7 +102,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square.and.pencil" catalog="system"/>
                                 <connections>
-                                    <action selector="addButtonDidPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ku1-BA-A6W"/>
+                                    <action selector="addButtonDidPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="m8j-vm-xCp"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Задач" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ff-gg-D3l">

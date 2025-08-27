@@ -7,6 +7,17 @@
 
 import UIKit
 
+protocol ToDoDetailsViewInputProtocol: AnyObject {
+    func displayTodoTitle(with title: String)
+    func displayTodoBody(with body: String)
+    func displayTodoDate(with date: String)
+}
+
+protocol ToDoDetailsViewOutputProtocol {
+    init(view: ToDoDetailsViewInputProtocol)
+    func showToDoDetails()
+}
+
 class ToDoDetailsViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -16,19 +27,14 @@ class ToDoDetailsViewController: UIViewController {
     @IBOutlet weak var bodyTextView: UITextView!
     @IBOutlet weak var bodyTextViewHeight: NSLayoutConstraint!
     
+    var presenter: ToDoDetailsViewOutputProtocol!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        titleTextView.delegate = self
-        bodyTextView.delegate = self
-        titleTextView.isScrollEnabled = false
-        bodyTextView.isScrollEnabled = false
-        
         configureUI()
-        registerForKeyboardNotifications()
+        presenter.showToDoDetails()
     }
     
-
-
     deinit {
         unregisterForKeyboardNotifications()
     }
@@ -37,7 +43,12 @@ class ToDoDetailsViewController: UIViewController {
 //MARK: - Private Methods
 extension ToDoDetailsViewController {
     private func configureUI() {
+        titleTextView.delegate = self
+        bodyTextView.delegate = self
+        titleTextView.isScrollEnabled = false
+        bodyTextView.isScrollEnabled = false
         titleTextView.becomeFirstResponder()
+        registerForKeyboardNotifications()
     }
     
     private func registerForKeyboardNotifications() {
@@ -94,5 +105,20 @@ extension ToDoDetailsViewController: UITextViewDelegate {
         bodyTextViewHeight.constant = max(bodySize.height, 250)
 
         view.layoutIfNeeded()
+    }
+}
+
+//MARK: - ToDoDetailsViewInputProtocol
+extension ToDoDetailsViewController: ToDoDetailsViewInputProtocol {
+    func displayTodoTitle(with title: String) {
+        titleTextView.text = title
+    }
+    
+    func displayTodoBody(with body: String) {
+        bodyTextView.text = body
+    }
+    
+    func displayTodoDate(with date: String) {
+        dateLabel.text = date
     }
 }
