@@ -16,20 +16,37 @@ protocol ToDoListInteractorOutputProtocol: AnyObject {
 }
 
 class ToDoListInteractor: ToDoListInteractorInputProtocol {
-    private unowned let presenter: ToDoListInteractorOutputProtocol
+    private weak var presenter: ToDoListInteractorOutputProtocol?
     
     required init(presenter: ToDoListInteractorOutputProtocol) {
         self.presenter = presenter
     }
-    
+
     func fetchTodos() {
-        NetworkManager.shared.fetchTodos { [unowned self] result in
+        if !UserDefaults.standard.bool(forKey: "hasLoadedTodos") {
+            NetworkManager.shared.fetchTodos { [weak self] result in
+                switch result {
+                case .success(let todos):
+                    StorageManager.shared.saveTodos(todos.todos)
+                    UserDefaults.standard.set(true, forKey: "hasLoadedTodos")
+                    self?.fetchTodosInDataBase()
+                case .failure(let error):
+                    print("Error NetworkManager in ToDoListInteractor: \(error)")
+                }
+            }
+        } else {
+            fetchTodosInDataBase()
+        }
+    }
+    
+    private func fetchTodosInDataBase() {
+        StorageManager.shared.readTodos { [weak self] result in
             switch result {
-            case .success(let todos):
-                let dataStore = ToDoListDataStore(todos: todos.todos)
-                presenter.todosDidReceive(with: dataStore)
+            case .success(let localTodos):
+                let dataStore = ToDoListDataStore(todos: localTodos)
+                self?.presenter?.todosDidReceive(with: dataStore)
             case .failure(let error):
-                print("Error NetworkManager in ToDoListInteractor: \(error)")
+                print("Error StorageManager readTodos in ToDoListInteractor: \(error)")
             }
         }
     }

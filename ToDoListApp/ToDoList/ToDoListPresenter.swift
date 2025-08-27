@@ -7,14 +7,14 @@
 import Foundation
 
 struct ToDoListDataStore {
-    let todos: [Todo]
+    let todos: [CDTodo]
 }
 
 class ToDoListPresenter: ToDoListViewOutputProtocol {
     var interactor: ToDoListInteractorInputProtocol!
     var router: ToDoListRouterInputProtocol!
     
-    private unowned let view: ToDoListViewInputProtocol
+    private weak var view: ToDoListViewInputProtocol?
     private var dataStore: ToDoListDataStore?
     
     required init(view: ToDoListViewInputProtocol) {
@@ -37,6 +37,6 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
         self.dataStore = dataStore
         let section = ToDoSectionViewModel()
         dataStore.todos.forEach { section.rows.append(ToDoCellViewModel(todo: $0)) }
-        view.reloadData(for: section)
+        view?.reloadData(for: section)
     }
 }

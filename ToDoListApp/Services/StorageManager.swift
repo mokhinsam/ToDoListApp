@@ -1,0 +1,64 @@
+//
+//  StorageManager.swift
+//  ToDoListApp
+//
+//  Created by Дарина Самохина on 27.08.2025.
+//
+import CoreData
+
+class StorageManager {
+    static let shared = StorageManager()
+    
+    // MARK: - Core Data stack
+    private let persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "ToDoListApp")
+        container.loadPersistentStores { _, error in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+        return container
+    }()
+    
+    private var viewContext: NSManagedObjectContext
+    
+    private init() {
+        viewContext = persistentContainer.viewContext
+    }
+    
+    func saveTodos(_ todos: [Todo]) {
+        for todo in todos {
+            let cdTodo = CDTodo(context: viewContext)
+            cdTodo.title = todo.todo
+            cdTodo.body = todo.note
+            cdTodo.date = todo.date
+            cdTodo.completed = todo.completed
+        }
+        saveContext()
+    }
+    
+    //MARK: - CRUD
+    func readTodos(completion: (Result<[CDTodo], Error>) -> Void) {
+        let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
+        
+        do {
+            let todos = try viewContext.fetch(fetchRequest)
+            completion(.success(todos))
+        } catch {
+            print("Failed to fetch from CoreData: \(error)")
+            completion(.failure(error))
+        }
+    }
+    
+    // MARK: - Core Data Saving support
+    func saveContext () {
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+}

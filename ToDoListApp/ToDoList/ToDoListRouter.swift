@@ -9,18 +9,18 @@ import Foundation
 
 protocol ToDoListRouterInputProtocol {
     init(view: ToDoListViewController)
-    func openToDoDetailsViewController(with todo: Todo)
+    func openToDoDetailsViewController(with todo: CDTodo)
 }
 
 class ToDoListRouter: ToDoListRouterInputProtocol {
 
-    private unowned let view: ToDoListViewController
+    private weak var view: ToDoListViewController?
     
     required init(view: ToDoListViewController) {
         self.view = view
     }
     
-    func openToDoDetailsViewController(with todo: Todo) {
-        view.performSegue(withIdentifier: "fromToDoListToToDoDetails", sender: todo)
+    func openToDoDetailsViewController(with todo: CDTodo) {
+        view?.performSegue(withIdentifier: "fromToDoListToToDoDetails", sender: todo)
     }
 }

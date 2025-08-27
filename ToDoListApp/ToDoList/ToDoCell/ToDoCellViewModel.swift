@@ -14,7 +14,7 @@ protocol ToDoCellViewModelProtocol {
     var todoDate: String { get }
     var todoDoneButton: String { get }
     var todoCompleted: Bool { get }
-    init(todo: Todo)
+    init(todo: CDTodo)
 }
 
 protocol ToDoSectionViewModelProtocol {
@@ -28,11 +28,11 @@ class ToDoCellViewModel: ToDoCellViewModelProtocol {
     }
     
     var todoTitle: String {
-        todo.todo
+        todo.title ?? ""
     }
     
     var todoBody: String {
-        todo.note ?? todo.todo
+        todo.body ?? ""
     }
     
     var todoDate: String {
@@ -47,9 +47,9 @@ class ToDoCellViewModel: ToDoCellViewModelProtocol {
         todo.completed
     }
     
-    private let todo: Todo
+    private let todo: CDTodo
     
-    required init(todo: Todo) {
+    required init(todo: CDTodo) {
         self.todo = todo
     }
 }
