@@ -30,18 +30,71 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ToDoCell" id="1AP-hk-7eu">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ToDoCell" id="1AP-hk-7eu" customClass="ToDoCell" customModule="ToDoListApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1AP-hk-7eu" id="N9p-dQ-I8n">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="83"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CK6-Mx-SaR">
+                                                    <rect key="frame" x="16" y="10" width="35" height="34.333333333333336"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="35" id="Czi-lS-Vak"/>
+                                                    </constraints>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="circle" catalog="system"/>
+                                                </button>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="lqr-R7-dKo">
+                                                    <rect key="frame" x="56" y="10" width="321" height="63"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Сходить в магазин" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPX-Uy-8MQ">
+                                                            <rect key="frame" x="0.0" y="0.0" width="321" height="20.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Купить яблоки, апельсины 2 шт, мясо. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="86o-6M-cMR">
+                                                            <rect key="frame" x="0.0" y="25.666666666666664" width="321" height="18"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02/03/24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NMg-Qs-0LM">
+                                                            <rect key="frame" x="0.0" y="48.666666666666664" width="321" height="14.333333333333336"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="lqr-R7-dKo" firstAttribute="leading" secondItem="CK6-Mx-SaR" secondAttribute="trailing" constant="5" id="0Hg-bg-fWh"/>
+                                                <constraint firstItem="lqr-R7-dKo" firstAttribute="top" secondItem="N9p-dQ-I8n" secondAttribute="top" constant="10" id="2fv-6d-Oto"/>
+                                                <constraint firstItem="CK6-Mx-SaR" firstAttribute="leading" secondItem="N9p-dQ-I8n" secondAttribute="leading" constant="16" id="7Ku-aD-h2c"/>
+                                                <constraint firstAttribute="trailing" secondItem="lqr-R7-dKo" secondAttribute="trailing" constant="16" id="Cur-Kq-BsQ"/>
+                                                <constraint firstAttribute="bottom" secondItem="lqr-R7-dKo" secondAttribute="bottom" constant="10" id="H5R-Fh-2MU"/>
+                                                <constraint firstItem="CK6-Mx-SaR" firstAttribute="top" secondItem="N9p-dQ-I8n" secondAttribute="top" constant="10" id="orH-Qz-ycr"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="todoBodyLabel" destination="86o-6M-cMR" id="VUE-YC-fM9"/>
+                                            <outlet property="todoDateLabel" destination="NMg-Qs-0LM" id="Bar-j6-dhl"/>
+                                            <outlet property="todoDoneButton" destination="CK6-Mx-SaR" id="6Cs-KN-v17"/>
+                                            <outlet property="todoTitleLabel" destination="dPX-Uy-8MQ" id="qgc-2u-WZm"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="df0-ts-yWF"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="PYK-ht-RXq"/>
+                                </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HwD-e4-LIT">
-                                <rect key="frame" x="327" y="762" width="50" height="50"/>
+                                <rect key="frame" x="326.33333333333331" y="762" width="50.666666666666686" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="gUD-lW-MEp"/>
                                 </constraints>
@@ -193,6 +246,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="circle" catalog="system" width="128" height="123"/>
         <image name="square.and.pencil" catalog="system" width="128" height="121"/>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
