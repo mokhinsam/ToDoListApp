@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ToDoDetailsInteractorInputProtocol {
+    init(presenter: ToDoDetailsInteractorOutputProtocol)
     init(presenter: ToDoDetailsInteractorOutputProtocol, todo: CDTodo)
     func showTodoDetails()
 }
@@ -20,7 +21,11 @@ protocol ToDoDetailsInteractorOutputProtocol: AnyObject {
 class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
     
     private weak var presenter: ToDoDetailsInteractorOutputProtocol?
-    private let todo: CDTodo
+    private var todo: CDTodo?
+    
+    required init(presenter: ToDoDetailsInteractorOutputProtocol) {
+        self.presenter = presenter
+    }
     
     required init(presenter: ToDoDetailsInteractorOutputProtocol, todo: CDTodo) {
         self.presenter = presenter
@@ -28,10 +33,11 @@ class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
     }
     
     func showTodoDetails() {
+        guard let todo = todo else { return }
         let dataStore = ToDoDetailsDataStore(
             todoTitle: todo.title ?? "",
             todoBody: todo.body ?? "",
-            todoDate: todo.date ?? "02/02/02"
+            todoDate: todo.date ?? "00/00/00"
         )
         presenter?.receiveToDoDetails(with: dataStore)
     }

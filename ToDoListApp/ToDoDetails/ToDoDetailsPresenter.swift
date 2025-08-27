@@ -15,9 +15,11 @@ class ToDoDetailsPresenter: ToDoDetailsViewOutputProtocol {
     
     var interactor: ToDoDetailsInteractorInputProtocol!
     private weak var view: ToDoDetailsViewInputProtocol?
+    private let isNewToDo: Bool
     
-    required init(view: ToDoDetailsViewInputProtocol) {
+    required init(view: ToDoDetailsViewInputProtocol, isNewToDo: Bool) {
         self.view = view
+        self.isNewToDo = isNewToDo
     }
     
     func showToDoDetails() {
@@ -31,5 +33,9 @@ extension ToDoDetailsPresenter: ToDoDetailsInteractorOutputProtocol {
         view?.displayTodoTitle(with: dataStore.todoTitle)
         view?.displayTodoBody(with: dataStore.todoBody)
         view?.displayTodoDate(with: dataStore.todoDate)
+        
+        if isNewToDo {
+            view?.activateTitleEditing()
+        }
     }
 }

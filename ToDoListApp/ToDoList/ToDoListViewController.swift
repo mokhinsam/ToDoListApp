@@ -29,26 +29,28 @@ class ToDoListViewController: UIViewController {
     private let configurator: ToDoListConfiguratorInputProtocol = ToDoListConfigurator()
     private var sectionViewModel: ToDoSectionViewModelProtocol = ToDoSectionViewModel()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configurator.configure(withView: self)
         presenter.viewDidLoad()
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let todoDetailsVC = segue.destination as? ToDoDetailsViewController else {
-            return
+        if segue.identifier == "fromToDoListToToDoDetails" {
+            guard let destinationVC = segue.destination as? ToDoDetailsViewController else { return }
+            let configurator: ToDoDetailsConfiguratorInputProtocol = ToDoDetailsConfigurator()
+            if let todo = sender as? CDTodo {
+                configurator.configureForExistingToDo(withView: destinationVC, and: todo)
+            } else {
+                configurator.configureForNewToDo(withView: destinationVC)
+            }
         }
-        let configurator: ToDoDetailsConfiguratorInputProtocol = ToDoDetailsConfigurator()
-        configurator.configure(withView: todoDetailsVC, and: sender as! CDTodo)
     }
 
     @IBAction func addButtonDidPressed() {
         presenter.didTapAddButton()
     }
-    
 }
 
 //MARK: - Private Methods
@@ -88,5 +90,3 @@ extension ToDoListViewController: ToDoListViewInputProtocol {
         tableView.reloadData()
     }
 }
-
-

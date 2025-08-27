@@ -11,10 +11,11 @@ protocol ToDoDetailsViewInputProtocol: AnyObject {
     func displayTodoTitle(with title: String)
     func displayTodoBody(with body: String)
     func displayTodoDate(with date: String)
+    func activateTitleEditing()
 }
 
 protocol ToDoDetailsViewOutputProtocol {
-    init(view: ToDoDetailsViewInputProtocol)
+    init(view: ToDoDetailsViewInputProtocol, isNewToDo: Bool)
     func showToDoDetails()
 }
 
@@ -47,7 +48,6 @@ extension ToDoDetailsViewController {
         bodyTextView.delegate = self
         titleTextView.isScrollEnabled = false
         bodyTextView.isScrollEnabled = false
-        titleTextView.becomeFirstResponder()
         registerForKeyboardNotifications()
     }
     
@@ -120,5 +120,9 @@ extension ToDoDetailsViewController: ToDoDetailsViewInputProtocol {
     
     func displayTodoDate(with date: String) {
         dateLabel.text = date
+    }
+    
+    func activateTitleEditing() {
+        titleTextView.becomeFirstResponder()
     }
 }
