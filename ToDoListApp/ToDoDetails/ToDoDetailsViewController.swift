@@ -30,10 +30,18 @@ class ToDoDetailsViewController: UIViewController {
     
     var presenter: ToDoDetailsViewOutputProtocol!
     
+    private var lastTitleTextViewHeight: CGFloat = 0
+    private var lastBodyTextViewHeight: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         presenter.showToDoDetails()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTextViewHeightsIfNeeded()
     }
     
     deinit {
@@ -84,27 +92,35 @@ extension ToDoDetailsViewController {
         scrollView.verticalScrollIndicatorInsets.bottom = 0
     }
     
+    private func updateTextViewHeightsIfNeeded() {
+        let maxWidth = titleTextView.frame.width
+        let maxTitleSize = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
+        let fittingTitleSize = titleTextView.sizeThatFits(maxTitleSize).height
+        let newTitleHeight = max(fittingTitleSize, 50)
+        
+        let maxBodySize = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
+        let fittingBodyHeight = bodyTextView.sizeThatFits(maxBodySize).height
+        let newBodyHeight = max(fittingBodyHeight, 250)
+        
+        if newTitleHeight != lastTitleTextViewHeight
+            || newBodyHeight != lastBodyTextViewHeight {
+            lastTitleTextViewHeight = newTitleHeight
+            lastBodyTextViewHeight = newBodyHeight
+            
+            titleTextViewHeight.constant = newTitleHeight
+            bodyTextViewHeight.constant = newBodyHeight
+            
+            UIView.animate(withDuration: 0.2) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
 }
 
 //MARK: - UITextViewDelegate
 extension ToDoDetailsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        updateTextViewHeights()
-    }
-
-    func updateTextViewHeights() {
-        let maxWidth = titleTextView.frame.width
-        let titleSize = titleTextView.sizeThatFits(
-            CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
-        )
-        titleTextViewHeight.constant = max(titleSize.height, 50)
-        
-        let bodySize = bodyTextView.sizeThatFits(
-            CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
-        )
-        bodyTextViewHeight.constant = max(bodySize.height, 250)
-
-        view.layoutIfNeeded()
+        updateTextViewHeightsIfNeeded()
     }
 }
 
@@ -112,10 +128,12 @@ extension ToDoDetailsViewController: UITextViewDelegate {
 extension ToDoDetailsViewController: ToDoDetailsViewInputProtocol {
     func displayTodoTitle(with title: String) {
         titleTextView.text = title
+        updateTextViewHeightsIfNeeded()
     }
     
     func displayTodoBody(with body: String) {
         bodyTextView.text = body
+        updateTextViewHeightsIfNeeded()
     }
     
     func displayTodoDate(with date: String) {
