@@ -13,6 +13,7 @@ protocol ToDoCellViewModelProtocol {
     var todoBody: String { get }
     var todoDate: String { get }
     var todoDoneButton: String { get }
+    var todoCompleted: Bool { get }
     init(todo: Todo)
 }
 
@@ -40,6 +41,10 @@ class ToDoCellViewModel: ToDoCellViewModelProtocol {
     
     var todoDoneButton: String {
         todo.completed ? "checkmark.circle" : "circle"
+    }
+    
+    var todoCompleted: Bool {
+        todo.completed
     }
     
     private let todo: Todo

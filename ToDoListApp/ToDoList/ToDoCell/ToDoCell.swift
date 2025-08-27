@@ -26,10 +26,11 @@ class ToDoCell: UITableViewCell, CellModelRepresentable {
     
     private func updateView() {
         guard let viewModel = viewModel as? ToDoCellViewModel else { return }
-        todoDoneButton.setImage(UIImage(systemName: viewModel.todoDoneButton), for: .normal)
         todoTitleLabel.text = viewModel.todoTitle
         todoBodyLabel.text = viewModel.todoBody
         todoDateLabel.text = viewModel.todoDate
+        todoDoneButton.tintColor = viewModel.todoCompleted ? .systemYellow : .white
+        todoDoneButton.setImage(UIImage(systemName: viewModel.todoDoneButton), for: .normal)
     }
 }
 
