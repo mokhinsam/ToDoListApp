@@ -184,7 +184,7 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="04/04/24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lh4-8U-hJJ">
-                                        <rect key="frame" x="36" y="58" width="52.666666666666657" height="30"/>
+                                        <rect key="frame" x="24.999999999999996" y="58" width="52.666666666666657" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="xZn-hc-fbH"/>
                                         </constraints>
@@ -211,7 +211,7 @@
                                     <constraint firstAttribute="trailing" secondItem="ZZh-bD-iGk" secondAttribute="trailing" constant="16" id="HPb-Hm-7Hy"/>
                                     <constraint firstItem="ZZh-bD-iGk" firstAttribute="centerX" secondItem="cYX-Ik-eBo" secondAttribute="centerX" id="I3G-hS-jmb"/>
                                     <constraint firstItem="ZZh-bD-iGk" firstAttribute="trailing" secondItem="l2O-3o-zXl" secondAttribute="trailing" id="bvT-wB-XwX"/>
-                                    <constraint firstItem="Lh4-8U-hJJ" firstAttribute="leading" secondItem="iU6-WL-cC0" secondAttribute="leading" constant="36" id="hIg-vr-q8v"/>
+                                    <constraint firstItem="Lh4-8U-hJJ" firstAttribute="leading" secondItem="iU6-WL-cC0" secondAttribute="leading" constant="25" id="hIg-vr-q8v"/>
                                     <constraint firstAttribute="bottom" secondItem="ZZh-bD-iGk" secondAttribute="bottom" id="ihw-qr-kex"/>
                                     <constraint firstItem="ZZh-bD-iGk" firstAttribute="leading" secondItem="l2O-3o-zXl" secondAttribute="leading" id="nIv-Ic-l0c"/>
                                     <constraint firstItem="iU6-WL-cC0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Lh4-8U-hJJ" secondAttribute="trailing" symbolic="YES" id="tnW-WN-Ua2"/>
@@ -231,7 +231,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="ao8-LK-uHa">
-                        <barButtonItem key="rightBarButtonItem" title="Сохранить" style="plain" id="uoh-wO-d7R">
+                        <barButtonItem key="rightBarButtonItem" title="Сохранить" id="uoh-wO-d7R">
                             <connections>
                                 <action selector="saveButtonDidPressed:" destination="mj2-Qo-aXq" id="D5m-Om-mMe"/>
                             </connections>
