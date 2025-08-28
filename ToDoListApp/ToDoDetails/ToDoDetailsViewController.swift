@@ -17,6 +17,7 @@ protocol ToDoDetailsViewInputProtocol: AnyObject {
 protocol ToDoDetailsViewOutputProtocol {
     init(view: ToDoDetailsViewInputProtocol, isNewToDo: Bool)
     func showToDoDetails()
+    func saveButtonPressed(title: String, body: String, date: String)
 }
 
 class ToDoDetailsViewController: UIViewController {
@@ -37,6 +38,12 @@ class ToDoDetailsViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         presenter.showToDoDetails()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .save,
+            target: self,
+            action: #selector(saveButtonTapped)
+        )
     }
     
     override func viewDidLayoutSubviews() {
@@ -77,20 +84,6 @@ extension ToDoDetailsViewController {
     private func unregisterForKeyboardNotifications() {
         NotificationCenter.default.removeObserver(self)
     }
-
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo else { return }
-        let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]
-        guard let keyboardFrame = keyboardFrame as? CGRect else { return }
-        let keyboardHeight = keyboardFrame.height
-        scrollView.contentInset.bottom = keyboardHeight
-        scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        scrollView.contentInset.bottom = 0
-        scrollView.verticalScrollIndicatorInsets.bottom = 0
-    }
     
     private func updateTextViewHeightsIfNeeded() {
         let maxWidth = titleTextView.frame.width
@@ -114,6 +107,28 @@ extension ToDoDetailsViewController {
                 self.view.layoutIfNeeded()
             }
         }
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]
+        guard let keyboardFrame = keyboardFrame as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+        scrollView.contentInset.bottom = keyboardHeight
+        scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        scrollView.contentInset.bottom = 0
+        scrollView.verticalScrollIndicatorInsets.bottom = 0
+    }
+    
+    @objc private func saveButtonTapped() {
+        let title = titleTextView.text ?? ""
+        let body = bodyTextView.text ?? ""
+        let date = dateLabel.text ?? ""
+
+        presenter.saveButtonPressed(title: title, body: body, date: date)
     }
 }
 

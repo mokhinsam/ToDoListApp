@@ -19,6 +19,7 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
     
     required init(view: ToDoListViewInputProtocol) {
         self.view = view
+        subscribeToUpdates()
     }
     
     func viewDidLoad() {
@@ -32,6 +33,22 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
     
     func didTapAddButton() {
         router.openToDoDetailsViewController()
+    }
+}
+
+//MARK: - Private Methods
+extension ToDoListPresenter {
+    private func subscribeToUpdates() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleToDoListUpdated),
+            name: .todoDidUpdate,
+            object: nil
+        )
+    }
+
+    @objc private func handleToDoListUpdated() {
+        interactor.fetchTodos()
     }
 }
 

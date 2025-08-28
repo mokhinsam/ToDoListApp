@@ -38,4 +38,13 @@ extension ToDoDetailsPresenter: ToDoDetailsInteractorOutputProtocol {
             view?.activateTitleEditing()
         }
     }
+    
+    func saveButtonPressed(title: String, body: String, date: String) {
+        if isNewToDo {
+            interactor.createNewToDo(title: title, body: body, date: date)
+        } else {
+            interactor.updateExistingToDo(title: title, body: body)
+        }
+    }
+
 }

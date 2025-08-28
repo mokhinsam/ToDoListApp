@@ -38,6 +38,14 @@ class StorageManager {
     }
     
     //MARK: - CRUD
+    func createNewToDoWith(title: String, body: String, date: String) {
+        let newToDo = CDTodo(context: viewContext)
+        newToDo.title = title
+        newToDo.body = body
+        newToDo.date = date
+        saveContext()
+    }
+    
     func readTodos(completion: (Result<[CDTodo], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
         

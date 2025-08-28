@@ -11,6 +11,8 @@ protocol ToDoDetailsInteractorInputProtocol {
     init(presenter: ToDoDetailsInteractorOutputProtocol)
     init(presenter: ToDoDetailsInteractorOutputProtocol, todo: CDTodo)
     func showTodoDetails()
+    func updateExistingToDo(title: String, body: String)
+    func createNewToDo(title: String, body: String, date: String)
 }
 
 protocol ToDoDetailsInteractorOutputProtocol: AnyObject {
@@ -50,6 +52,19 @@ class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
             presenter?.receiveToDoDetails(with: dataStore)
         }
     }
+    
+    func updateExistingToDo(title: String, body: String) {
+        
+    }
+    
+    func createNewToDo(title: String, body: String, date: String) {
+        StorageManager.shared.createNewToDoWith(
+            title: title,
+            body: body,
+            date: date
+        )
+        todoDidUpdate()
+    }
 }
 
 //MARK: - Private Methods
@@ -59,5 +74,9 @@ extension ToDoDetailsInteractor {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yy"
         return formatter.string(from: date)
+    }
+    
+    private func todoDidUpdate() {
+        NotificationCenter.default.post(name: .todoDidUpdate, object: nil)
     }
 }
