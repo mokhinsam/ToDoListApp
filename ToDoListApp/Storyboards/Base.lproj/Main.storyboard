@@ -230,11 +230,18 @@
                             <constraint firstItem="cYX-Ik-eBo" firstAttribute="leading" secondItem="zoZ-8Q-hAC" secondAttribute="leading" id="Xoj-Cv-5XK"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="ao8-LK-uHa"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="ao8-LK-uHa">
+                        <barButtonItem key="rightBarButtonItem" title="Сохранить" style="plain" id="uoh-wO-d7R">
+                            <connections>
+                                <action selector="saveButtonDidPressed:" destination="mj2-Qo-aXq" id="D5m-Om-mMe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bodyTextView" destination="ZZh-bD-iGk" id="Vau-ng-qaE"/>
                         <outlet property="bodyTextViewHeight" destination="oEt-sr-HtL" id="Gam-29-K3T"/>
                         <outlet property="dateLabel" destination="Lh4-8U-hJJ" id="oa4-Eo-f2V"/>
+                        <outlet property="saveButton" destination="uoh-wO-d7R" id="OFb-el-t3m"/>
                         <outlet property="scrollView" destination="cYX-Ik-eBo" id="pMv-OO-YPC"/>
                         <outlet property="titleTextView" destination="l2O-3o-zXl" id="akC-i2-0Wu"/>
                         <outlet property="titleTextViewHeight" destination="UfX-37-4uf" id="1bU-wZ-dtL"/>

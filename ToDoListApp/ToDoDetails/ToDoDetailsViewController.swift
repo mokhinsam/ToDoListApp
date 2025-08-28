@@ -28,6 +28,7 @@ class ToDoDetailsViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var bodyTextView: UITextView!
     @IBOutlet weak var bodyTextViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var presenter: ToDoDetailsViewOutputProtocol!
     
@@ -38,18 +39,20 @@ class ToDoDetailsViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         presenter.showToDoDetails()
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .save,
-            target: self,
-            action: #selector(saveButtonTapped)
-        )
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTextViewHeightsIfNeeded()
     }
+    
+    @IBAction func saveButtonDidPressed(_ sender: UIBarButtonItem) {
+        let title = titleTextView.text ?? ""
+        let body = bodyTextView.text ?? ""
+        let date = dateLabel.text ?? ""
+        presenter.saveButtonPressed(title: title, body: body, date: date)
+    }
+    
     
     deinit {
         unregisterForKeyboardNotifications()
@@ -63,6 +66,7 @@ extension ToDoDetailsViewController {
         bodyTextView.delegate = self
         titleTextView.isScrollEnabled = false
         bodyTextView.isScrollEnabled = false
+        saveButton.isHidden = true
         registerForKeyboardNotifications()
     }
     
@@ -122,20 +126,17 @@ extension ToDoDetailsViewController {
         scrollView.contentInset.bottom = 0
         scrollView.verticalScrollIndicatorInsets.bottom = 0
     }
-    
-    @objc private func saveButtonTapped() {
-        let title = titleTextView.text ?? ""
-        let body = bodyTextView.text ?? ""
-        let date = dateLabel.text ?? ""
-
-        presenter.saveButtonPressed(title: title, body: body, date: date)
-    }
 }
 
 //MARK: - UITextViewDelegate
 extension ToDoDetailsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         updateTextViewHeightsIfNeeded()
+        if textView.text.isEmpty {
+            saveButton.isHidden = true
+        } else {
+            saveButton.isHidden = false
+        }
     }
 }
 
