@@ -68,6 +68,10 @@ extension ToDoDetailsViewController {
         titleTextView.isScrollEnabled = false
         bodyTextView.isScrollEnabled = false
         saveButton.isHidden = true
+        titleTextView.autocorrectionType = .no
+        titleTextView.spellCheckingType = .no
+        bodyTextView.autocorrectionType = .no
+        bodyTextView.spellCheckingType = .no
         registerForKeyboardNotifications()
     }
     
@@ -91,14 +95,26 @@ extension ToDoDetailsViewController {
     }
     
     private func updateTextViewHeightsIfNeeded() {
-        let maxWidth = titleTextView.frame.width
-        let maxTitleSize = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
-        let fittingTitleSize = titleTextView.sizeThatFits(maxTitleSize).height
-        let newTitleHeight = max(fittingTitleSize, 50)
+        let titleWidth = titleTextView.frame.width
+        let bodyWidth = bodyTextView.frame.width
         
-        let maxBodySize = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
+        guard titleWidth.isFinite && titleWidth > 0,
+              bodyWidth.isFinite && bodyWidth > 0 else {
+            return
+        }
+        
+        let maxTitleSize = CGSize(width: titleWidth, height: .greatestFiniteMagnitude)
+        let fittingTitleHeight = titleTextView.sizeThatFits(maxTitleSize).height
+        let newTitleHeight = max(fittingTitleHeight, 50)
+        
+        let maxBodySize = CGSize(width: bodyWidth, height: .greatestFiniteMagnitude)
         let fittingBodyHeight = bodyTextView.sizeThatFits(maxBodySize).height
         let newBodyHeight = max(fittingBodyHeight, 250)
+        
+        guard newTitleHeight.isFinite && newTitleHeight > 0,
+              newBodyHeight.isFinite && newBodyHeight > 0 else {
+            return
+        }
         
         if newTitleHeight != lastTitleTextViewHeight
             || newBodyHeight != lastBodyTextViewHeight {
