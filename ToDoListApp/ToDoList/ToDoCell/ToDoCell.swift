@@ -11,6 +11,10 @@ protocol CellModelRepresentable {
     var viewModel: ToDoCellViewModelProtocol? { get }
 }
 
+protocol ToDoCellDelegate: AnyObject {
+    func didTapDoneButton(in cell: ToDoCell)
+}
+
 class ToDoCell: UITableViewCell, CellModelRepresentable {
     
     @IBOutlet weak var todoDoneButton: UIButton!
@@ -18,10 +22,17 @@ class ToDoCell: UITableViewCell, CellModelRepresentable {
     @IBOutlet weak var todoBodyLabel: UILabel!
     @IBOutlet weak var todoDateLabel: UILabel!
     
+    weak var delegate: ToDoCellDelegate?
+    
     var viewModel: ToDoCellViewModelProtocol? {
         didSet {
             updateView()
         }
+    }
+    
+    
+    @IBAction func todoDoneButtonDidPressed() {
+        delegate?.didTapDoneButton(in: self)
     }
     
     private func updateView() {

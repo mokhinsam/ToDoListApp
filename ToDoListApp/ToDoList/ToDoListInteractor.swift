@@ -11,6 +11,7 @@ protocol ToDoListInteractorInputProtocol {
     func fetchTodos()
     func fetchTodos(filter: String)
     func deleteTodo(_ todo: CDTodo, at indexPath: IndexPath)
+    func toggleTodoDone(for todo: CDTodo, completion: @escaping (CDTodo) -> Void)
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
@@ -44,12 +45,12 @@ class ToDoListInteractor: ToDoListInteractorInputProtocol {
     }
     
     func fetchTodos(filter: String) {
-        StorageManager.shared.fetchTodos(filter: filter) { result in
+        StorageManager.shared.fetchTodos(filter: filter) { [weak self] result in
             switch result {
             case .success(let todos):
-                presenter?.todosDidReceive(with: ToDoListDataStore(todos: todos))
+                self?.presenter?.todosDidReceive(with: ToDoListDataStore(todos: todos))
             case .failure(_ ):
-                presenter?.todosDidReceive(with: ToDoListDataStore(todos: []))
+                self?.presenter?.todosDidReceive(with: ToDoListDataStore(todos: []))
             }
         }
     }
@@ -57,6 +58,11 @@ class ToDoListInteractor: ToDoListInteractorInputProtocol {
     func deleteTodo(_ todo: CDTodo, at indexPath: IndexPath) {
         StorageManager.shared.delete(todo)
         presenter?.didDeleteTodo(at: indexPath)
+    }
+    
+    func toggleTodoDone(for todo: CDTodo, completion: @escaping (CDTodo) -> Void) {
+        StorageManager.shared.toggleTodoDone(for: todo)
+        completion(todo)
     }
 }
 

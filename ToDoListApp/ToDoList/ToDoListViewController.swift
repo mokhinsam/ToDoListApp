@@ -23,6 +23,7 @@ protocol ToDoListViewOutputProtocol {
     func deleteTodo(at indexPath: IndexPath)
     func didDeleteTodo(at indexPath: IndexPath)
     func didUpdateSearchText(_ text: String)
+    func didToggleTodoCompletion(at indexPath: IndexPath)
 }
 
 class ToDoListViewController: UIViewController {
@@ -112,6 +113,7 @@ extension ToDoListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellViewModel.cellIdentifier, for: indexPath)
         guard let cell = cell as? ToDoCell else { return UITableViewCell() }
         cell.viewModel = cellViewModel
+        cell.delegate = self
         return cell
     }
 }
@@ -167,5 +169,13 @@ extension ToDoListViewController: ToDoListViewInputProtocol {
     
     func updateToDoCountLabel(with count: Int) {
         toDoCountLabel.text = .todoCountString(for: count)
+    }
+}
+
+//MARK: - ToDoCellDelegate
+extension ToDoListViewController: ToDoCellDelegate {
+    func didTapDoneButton(in cell: ToDoCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        presenter.didToggleTodoCompletion(at: indexPath)
     }
 }

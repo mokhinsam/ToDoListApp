@@ -38,7 +38,7 @@ class StorageManager {
         saveContext()
     }
     
-    func fetchTodos(filter: String, completion: (Result<[CDTodo], Error>) -> Void) {
+    func fetchTodos(filter: String, completion: @escaping (Result<[CDTodo], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
         if !filter.isEmpty {
             fetchRequest.predicate = NSPredicate(format: "title CONTAINS[cd] %@ OR body CONTAINS[cd] %@", filter, filter)
@@ -61,10 +61,11 @@ class StorageManager {
         newToDo.body = body
         newToDo.date = date
         newToDo.createdAt = Date()
+        newToDo.completed = false
         saveContext()
     }
     
-    func readTodos(completion: (Result<[CDTodo], Error>) -> Void) {
+    func readTodos(completion: @escaping (Result<[CDTodo], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -95,6 +96,11 @@ class StorageManager {
         if didUpdate {
             saveContext()
         }
+    }
+    
+    func toggleTodoDone(for todo: CDTodo) {
+        todo.completed.toggle()
+        saveContext()
     }
     
     func delete(_ todo: CDTodo) {

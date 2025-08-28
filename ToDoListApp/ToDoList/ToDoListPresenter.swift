@@ -48,6 +48,26 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
             interactor.fetchTodos(filter: text)
         }
     }
+    
+    func didToggleTodoCompletion(at indexPath: IndexPath) {
+        guard let todo = dataStore?.todos[indexPath.row] else { return }
+        todo.completed.toggle()
+        StorageManager.shared.saveContext()
+        
+        let updatedViewModel = ToDoCellViewModel(todo: todo)
+        view?.reloadRow(at: indexPath, with: updatedViewModel)
+    }
+    
+    func didToggleTodoDone(at indexPath: IndexPath) {
+        guard let todo = dataStore?.todos[indexPath.row] else { return }
+        interactor.toggleTodoDone(for: todo) { [weak self] updatedTodo in
+            DispatchQueue.main.async {
+                let updatedViewModel = ToDoCellViewModel(todo: updatedTodo)
+                self?.view?.reloadRow(at: indexPath, with: updatedViewModel)
+            }
+        }
+    }
+
 }
 
 //MARK: - Private Methods
