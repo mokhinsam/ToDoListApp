@@ -51,8 +51,9 @@ class ToDoDetailsViewController: UIViewController {
         let body = bodyTextView.text ?? ""
         let date = dateLabel.text ?? ""
         presenter.saveButtonPressed(title: title, body: body, date: date)
+        view.endEditing(true)
+        saveButton.isHidden = true
     }
-    
     
     deinit {
         unregisterForKeyboardNotifications()
