@@ -7,7 +7,7 @@
 import Foundation
 
 struct ToDoListDataStore {
-    let todos: [CDTodo]
+    var todos: [CDTodo]
 }
 
 class ToDoListPresenter: ToDoListViewOutputProtocol {
@@ -47,8 +47,15 @@ extension ToDoListPresenter {
         )
     }
 
-    @objc private func handleToDoListUpdated() {
-        interactor.fetchTodos()
+    @objc private func handleToDoListUpdated(_ notification: Notification) {
+        if let updatedTodo = notification.object as? CDTodo,
+           let index = dataStore?.todos.firstIndex(where: { $0.objectID == updatedTodo.objectID }) {
+            dataStore?.todos[index] = updatedTodo
+            let updatedCellVM = ToDoCellViewModel(todo: updatedTodo)
+            view?.reloadRow(at: IndexPath(row: index, section: 0), with: updatedCellVM)
+        } else {
+            interactor.fetchTodos()
+        }
     }
 }
 

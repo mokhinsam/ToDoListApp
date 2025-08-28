@@ -133,7 +133,7 @@ extension ToDoDetailsViewController {
 extension ToDoDetailsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         updateTextViewHeightsIfNeeded()
-        if textView.text.isEmpty {
+        if titleTextView.text.isEmpty && bodyTextView.text.isEmpty {
             saveButton.isHidden = true
         } else {
             saveButton.isHidden = false

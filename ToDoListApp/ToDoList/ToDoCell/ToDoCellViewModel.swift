@@ -18,7 +18,7 @@ protocol ToDoCellViewModelProtocol {
 }
 
 protocol ToDoSectionViewModelProtocol {
-    var rows: [ToDoCellViewModelProtocol] { get }
+    var rows: [ToDoCellViewModelProtocol] { get set }
     var numberOfRows: Int { get }
 }
 

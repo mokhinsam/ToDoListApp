@@ -58,6 +58,26 @@ class StorageManager {
         }
     }
     
+    func update(todo: CDTodo, newTitle: String, newBody: String) {
+        var didUpdate = false
+        
+        if todo.body != newBody {
+            todo.body = newBody
+            didUpdate = true
+        }
+
+        if todo.title != newTitle {
+            todo.title = newTitle.isEmpty
+            ? "\(todo.body?.prefix(30) ?? "")..."
+            : newTitle
+            didUpdate = true
+        }
+
+        if didUpdate {
+            saveContext()
+        }
+    }
+    
     // MARK: - Core Data Saving support
     func saveContext () {
         if viewContext.hasChanges {

@@ -54,7 +54,9 @@ class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
     }
     
     func updateExistingToDo(title: String, body: String) {
-        
+        guard let todo = todo else { return }
+        StorageManager.shared.update(todo: todo, newTitle: title, newBody: body)
+        todoDidUpdate(withObject: todo)
     }
     
     func createNewToDo(title: String, body: String, date: String) {
@@ -76,7 +78,7 @@ extension ToDoDetailsInteractor {
         return formatter.string(from: date)
     }
     
-    private func todoDidUpdate() {
-        NotificationCenter.default.post(name: .todoDidUpdate, object: nil)
+    private func todoDidUpdate(withObject object: CDTodo? = nil) {
+        NotificationCenter.default.post(name: .todoDidUpdate, object: object)
     }
 }

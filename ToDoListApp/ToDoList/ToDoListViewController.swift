@@ -9,6 +9,7 @@ import UIKit
 
 protocol ToDoListViewInputProtocol: AnyObject {
     func reloadData(for section: ToDoSectionViewModel)
+    func reloadRow(at indexPath: IndexPath, with viewModel: ToDoCellViewModel)
 }
 
 protocol ToDoListViewOutputProtocol {
@@ -88,5 +89,10 @@ extension ToDoListViewController: ToDoListViewInputProtocol {
     func reloadData(for section: ToDoSectionViewModel) {
         sectionViewModel = section
         tableView.reloadData()
+    }
+    
+    func reloadRow(at indexPath: IndexPath, with viewModel: ToDoCellViewModel) {
+        sectionViewModel.rows[indexPath.row] = viewModel
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
