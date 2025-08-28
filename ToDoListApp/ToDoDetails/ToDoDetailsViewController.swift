@@ -12,6 +12,7 @@ protocol ToDoDetailsViewInputProtocol: AnyObject {
     func displayTodoBody(with body: String)
     func displayTodoDate(with date: String)
     func activateTitleEditing()
+    func dismissView()
 }
 
 protocol ToDoDetailsViewOutputProtocol {
@@ -175,5 +176,9 @@ extension ToDoDetailsViewController: ToDoDetailsViewInputProtocol {
     
     func activateTitleEditing() {
         titleTextView.becomeFirstResponder()
+    }
+    
+    func dismissView() {
+        navigationController?.popViewController(animated: true)
     }
 }

@@ -25,6 +25,15 @@ class ToDoDetailsPresenter: ToDoDetailsViewOutputProtocol {
     func showToDoDetails() {
         interactor.showTodoDetails()
     }
+    
+    func saveButtonPressed(title: String, body: String, date: String) {
+        if isNewToDo {
+            interactor.createNewToDo(title: title, body: body, date: date)
+            view?.dismissView()
+        } else {
+            interactor.updateExistingToDo(title: title, body: body)
+        }
+    }
 }
 
 //MARK: - ToDoDetailsInteractorOutputProtocol
@@ -38,13 +47,4 @@ extension ToDoDetailsPresenter: ToDoDetailsInteractorOutputProtocol {
             view?.activateTitleEditing()
         }
     }
-    
-    func saveButtonPressed(title: String, body: String, date: String) {
-        if isNewToDo {
-            interactor.createNewToDo(title: title, body: body, date: date)
-        } else {
-            interactor.updateExistingToDo(title: title, body: body)
-        }
-    }
-
 }
