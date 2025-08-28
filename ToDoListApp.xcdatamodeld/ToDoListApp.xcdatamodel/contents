@@ -3,6 +3,7 @@
     <entity name="CDTodo" representedClassName="CDTodo" syncable="YES" codeGenerationType="class">
         <attribute name="body" optional="YES" attributeType="String"/>
         <attribute name="completed" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>

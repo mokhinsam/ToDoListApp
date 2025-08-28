@@ -46,13 +46,18 @@ extension ToDoListPresenter {
             object: nil
         )
     }
-
+    
     @objc private func handleToDoListUpdated(_ notification: Notification) {
-        if let updatedTodo = notification.object as? CDTodo,
-           let index = dataStore?.todos.firstIndex(where: { $0.objectID == updatedTodo.objectID }) {
-            dataStore?.todos[index] = updatedTodo
-            let updatedCellVM = ToDoCellViewModel(todo: updatedTodo)
-            view?.reloadRow(at: IndexPath(row: index, section: 0), with: updatedCellVM)
+        if let updatedTodo = notification.object as? CDTodo {
+            if let index = dataStore?.todos.firstIndex(where: { $0.objectID == updatedTodo.objectID }) {
+                dataStore?.todos[index] = updatedTodo
+                let updatedCellVM = ToDoCellViewModel(todo: updatedTodo)
+                view?.reloadRow(at: IndexPath(row: index, section: 0), with: updatedCellVM)
+            } else {
+                let newCellVM = ToDoCellViewModel(todo: updatedTodo)
+                dataStore?.todos.insert(updatedTodo, at: 0)
+                view?.insertRow(at: IndexPath(row: 0, section: 0), with: newCellVM)
+            }
         } else {
             interactor.fetchTodos()
         }

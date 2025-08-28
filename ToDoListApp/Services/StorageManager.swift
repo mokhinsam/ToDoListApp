@@ -32,6 +32,7 @@ class StorageManager {
             cdTodo.title = todo.todo
             cdTodo.body = ""
             cdTodo.date = "01/01/25"
+            cdTodo.createdAt = Date()
             cdTodo.completed = todo.completed
         }
         saveContext()
@@ -43,12 +44,14 @@ class StorageManager {
         newToDo.title = title
         newToDo.body = body
         newToDo.date = date
+        newToDo.createdAt = Date()
         saveContext()
     }
     
     func readTodos(completion: (Result<[CDTodo], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
-        
+        let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         do {
             let todos = try viewContext.fetch(fetchRequest)
             completion(.success(todos))
