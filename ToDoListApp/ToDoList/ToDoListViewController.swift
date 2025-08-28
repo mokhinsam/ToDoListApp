@@ -12,6 +12,7 @@ protocol ToDoListViewInputProtocol: AnyObject {
     func reloadRow(at indexPath: IndexPath, with viewModel: ToDoCellViewModel)
     func insertRow(at indexPath: IndexPath, with viewModel: ToDoCellViewModel)
     func deleteRow(at indexPath: IndexPath)
+    func updateToDoCountLabel(with count: Int)
 }
 
 protocol ToDoListViewOutputProtocol {
@@ -162,5 +163,9 @@ extension ToDoListViewController: ToDoListViewInputProtocol {
     func deleteRow(at indexPath: IndexPath) {
         sectionViewModel.rows.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+    
+    func updateToDoCountLabel(with count: Int) {
+        toDoCountLabel.text = .todoCountString(for: count)
     }
 }

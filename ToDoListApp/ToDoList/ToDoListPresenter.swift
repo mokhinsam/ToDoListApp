@@ -71,6 +71,7 @@ extension ToDoListPresenter {
                 let newCellVM = ToDoCellViewModel(todo: updatedTodo)
                 dataStore?.todos.insert(updatedTodo, at: 0)
                 view?.insertRow(at: IndexPath(row: 0, section: 0), with: newCellVM)
+                view?.updateToDoCountLabel(with: dataStore?.todos.count ?? 0) 
             }
         } else {
             interactor.fetchTodos()
@@ -85,10 +86,12 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
         let section = ToDoSectionViewModel()
         dataStore.todos.forEach { section.rows.append(ToDoCellViewModel(todo: $0)) }
         view?.reloadData(for: section)
+        view?.updateToDoCountLabel(with: dataStore.todos.count)
     }
     
     func didDeleteTodo(at indexPath: IndexPath) {
         dataStore?.todos.remove(at: indexPath.row)
         view?.deleteRow(at: indexPath)
+        view?.updateToDoCountLabel(with: dataStore?.todos.count ?? 0)
     }
 }
