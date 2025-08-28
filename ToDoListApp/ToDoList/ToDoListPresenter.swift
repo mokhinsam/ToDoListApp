@@ -11,6 +11,7 @@ struct ToDoListDataStore {
 }
 
 class ToDoListPresenter: ToDoListViewOutputProtocol {
+    
     var interactor: ToDoListInteractorInputProtocol!
     var router: ToDoListRouterInputProtocol!
     
@@ -38,6 +39,14 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
     func deleteTodo(at indexPath: IndexPath) {
         guard let todo = dataStore?.todos[indexPath.row] else { return }
         interactor.deleteTodo(todo, at: indexPath)
+    }
+    
+    func didUpdateSearchText(_ text: String) {
+        if text.isEmpty {
+            interactor.fetchTodos()
+        } else {
+            interactor.fetchTodos(filter: text)
+        }
     }
 }
 

@@ -21,6 +21,7 @@ protocol ToDoListViewOutputProtocol {
     func didTapAddButton()
     func deleteTodo(at indexPath: IndexPath)
     func didDeleteTodo(at indexPath: IndexPath)
+    func didUpdateSearchText(_ text: String)
 }
 
 class ToDoListViewController: UIViewController {
@@ -40,6 +41,7 @@ class ToDoListViewController: UIViewController {
         configureUI()
         configurator.configure(withView: self)
         presenter.viewDidLoad()
+        registerForKeyboardNotifications(scrollView: tableView)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,6 +60,9 @@ class ToDoListViewController: UIViewController {
         presenter.didTapAddButton()
     }
     
+    deinit {
+        unregisterKeyboardNotifications()
+    }
 }
 
 //MARK: - Private Methods
@@ -84,6 +89,17 @@ extension ToDoListViewController {
     }
 }
 
+//MARK: - UISearchBarDelegate
+extension ToDoListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        presenter.didUpdateSearchText(searchText)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
 // MARK: - UITableViewDataSource
 extension ToDoListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -104,6 +120,7 @@ extension ToDoListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         presenter.didTapCell(at: indexPath)
+        view.endEditing(true)
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

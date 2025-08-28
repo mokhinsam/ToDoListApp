@@ -38,6 +38,22 @@ class StorageManager {
         saveContext()
     }
     
+    func fetchTodos(filter: String, completion: (Result<[CDTodo], Error>) -> Void) {
+        let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
+        if !filter.isEmpty {
+            fetchRequest.predicate = NSPredicate(format: "title CONTAINS[cd] %@ OR body CONTAINS[cd] %@", filter, filter)
+        }
+        let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let todos = try StorageManager.shared.viewContext.fetch(fetchRequest)
+            completion(.success(todos))
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
     //MARK: - CRUD
     func createNewToDoWith(title: String, body: String, date: String) {
         let newToDo = CDTodo(context: viewContext)

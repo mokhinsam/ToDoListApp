@@ -9,6 +9,7 @@ import Foundation
 protocol ToDoListInteractorInputProtocol {
     init(presenter: ToDoListInteractorOutputProtocol)
     func fetchTodos()
+    func fetchTodos(filter: String)
     func deleteTodo(_ todo: CDTodo, at indexPath: IndexPath)
 }
 
@@ -18,6 +19,7 @@ protocol ToDoListInteractorOutputProtocol: AnyObject {
 }
 
 class ToDoListInteractor: ToDoListInteractorInputProtocol {
+    
     private weak var presenter: ToDoListInteractorOutputProtocol?
     
     required init(presenter: ToDoListInteractorOutputProtocol) {
@@ -38,6 +40,17 @@ class ToDoListInteractor: ToDoListInteractorInputProtocol {
             }
         } else {
             fetchTodosInDataBase()
+        }
+    }
+    
+    func fetchTodos(filter: String) {
+        StorageManager.shared.fetchTodos(filter: filter) { result in
+            switch result {
+            case .success(let todos):
+                presenter?.todosDidReceive(with: ToDoListDataStore(todos: todos))
+            case .failure(_ ):
+                presenter?.todosDidReceive(with: ToDoListDataStore(todos: []))
+            }
         }
     }
     
