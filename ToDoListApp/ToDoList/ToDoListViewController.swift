@@ -28,6 +28,7 @@ class ToDoListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var toDoCountLabel: UILabel!
+    @IBOutlet weak var footerView: UIView!
     
     var presenter: ToDoListViewOutputProtocol!
     
@@ -56,12 +57,30 @@ class ToDoListViewController: UIViewController {
     @IBAction func addButtonDidPressed() {
         presenter.didTapAddButton()
     }
+    
 }
 
 //MARK: - Private Methods
 extension ToDoListViewController {
     private func configureUI() {
-        navigationController?.navigationBar.tintColor = UIColor.systemYellow
+        navigationController?.navigationBar.tintColor = .systemYellow
+        searchBar.searchTextField.backgroundColor = .darkGray
+    }
+}
+
+//MARK: - ScrollView
+extension ToDoListViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+        let isAtBottom = offsetY + frameHeight >= contentHeight - 1
+        
+        UIView.animate(withDuration: 0.2) {
+            self.footerView.backgroundColor = isAtBottom
+            ? .black
+            : .darkGray
+        }
     }
 }
 

@@ -13,11 +13,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ToDoListViewController" customModule="ToDoListApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="638"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="4Gt-f2-VrD">
-                                <rect key="frame" x="16" y="214" width="361" height="56"/>
+                            <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Gt-f2-VrD">
+                                <rect key="frame" x="16" y="0.0" width="361" height="56"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -26,7 +26,7 @@
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6Nk-Ht-osS">
-                                <rect key="frame" x="0.0" y="270" width="393" height="482"/>
+                                <rect key="frame" x="0.0" y="56" width="393" height="482"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -93,24 +93,38 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="PYK-ht-RXq"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HwD-e4-LIT">
-                                <rect key="frame" x="326.33333333333331" y="762" width="50.666666666666686" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NVw-pG-OXl">
+                                <rect key="frame" x="0.0" y="538" width="393" height="100"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HwD-e4-LIT">
+                                        <rect key="frame" x="326.33333333333331" y="16" width="50.666666666666686" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="gUD-lW-MEp"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="square.and.pencil" catalog="system"/>
+                                        <connections>
+                                            <action selector="addButtonDidPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="m8j-vm-xCp"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Задач" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ff-gg-D3l">
+                                        <rect key="frame" x="173.66666666666666" y="34" width="46" height="14.333333333333336"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="gUD-lW-MEp"/>
+                                    <constraint firstAttribute="height" constant="100" id="DrO-a3-F9n"/>
+                                    <constraint firstItem="HwD-e4-LIT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5ff-gg-D3l" secondAttribute="trailing" constant="8" symbolic="YES" id="OhB-En-4CY"/>
+                                    <constraint firstAttribute="trailing" secondItem="HwD-e4-LIT" secondAttribute="trailing" constant="16" id="bGr-hH-zFq"/>
+                                    <constraint firstItem="HwD-e4-LIT" firstAttribute="top" secondItem="NVw-pG-OXl" secondAttribute="top" constant="16" id="mnM-iz-gyZ"/>
+                                    <constraint firstItem="5ff-gg-D3l" firstAttribute="top" secondItem="NVw-pG-OXl" secondAttribute="top" constant="34" id="muf-lh-96x"/>
+                                    <constraint firstItem="5ff-gg-D3l" firstAttribute="centerX" secondItem="NVw-pG-OXl" secondAttribute="centerX" id="u84-eb-MOt"/>
                                 </constraints>
-                                <color key="tintColor" systemColor="systemYellowColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="square.and.pencil" catalog="system"/>
-                                <connections>
-                                    <action selector="addButtonDidPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="m8j-vm-xCp"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Задач" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ff-gg-D3l">
-                                <rect key="frame" x="173.66666666666666" y="776" width="46" height="14.333333333333371"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -118,14 +132,12 @@
                             <constraint firstItem="6Nk-Ht-osS" firstAttribute="top" secondItem="4Gt-f2-VrD" secondAttribute="bottom" id="7rK-ZD-5ZM"/>
                             <constraint firstItem="4Gt-f2-VrD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="F9K-cT-Czh"/>
                             <constraint firstItem="4Gt-f2-VrD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="FFx-TM-0h3"/>
-                            <constraint firstItem="HwD-e4-LIT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5ff-gg-D3l" secondAttribute="trailing" constant="8" symbolic="YES" id="ITk-Ps-igs"/>
+                            <constraint firstItem="NVw-pG-OXl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Fnr-2P-fWN"/>
                             <constraint firstAttribute="trailing" secondItem="4Gt-f2-VrD" secondAttribute="trailing" constant="16" id="LAb-Ty-KqA"/>
-                            <constraint firstItem="HwD-e4-LIT" firstAttribute="top" secondItem="6Nk-Ht-osS" secondAttribute="bottom" constant="10" id="LeK-0x-jxr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6Nk-Ht-osS" secondAttribute="trailing" id="RVa-tt-Kll"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HwD-e4-LIT" secondAttribute="trailing" constant="16" id="XaA-mY-Qf6"/>
-                            <constraint firstItem="5ff-gg-D3l" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="kMz-UI-S3w"/>
-                            <constraint firstItem="5ff-gg-D3l" firstAttribute="top" secondItem="6Nk-Ht-osS" secondAttribute="bottom" constant="24" id="ok2-ke-ROX"/>
-                            <constraint firstAttribute="bottom" secondItem="6Nk-Ht-osS" secondAttribute="bottom" constant="100" id="w6H-18-pFc"/>
+                            <constraint firstAttribute="bottom" secondItem="NVw-pG-OXl" secondAttribute="bottom" id="SQe-3o-Ggv"/>
+                            <constraint firstItem="NVw-pG-OXl" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="c8E-4U-M8a"/>
+                            <constraint firstItem="NVw-pG-OXl" firstAttribute="top" secondItem="6Nk-Ht-osS" secondAttribute="bottom" id="fwy-Us-px6"/>
                             <constraint firstItem="6Nk-Ht-osS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ztn-t2-ye3"/>
                         </constraints>
                     </view>
@@ -133,6 +145,7 @@
                         <barButtonItem key="backBarButtonItem" title="Назад" id="hd9-Bv-AM1"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="footerView" destination="NVw-pG-OXl" id="te9-5m-bf3"/>
                         <outlet property="searchBar" destination="4Gt-f2-VrD" id="pyV-rp-wTr"/>
                         <outlet property="tableView" destination="6Nk-Ht-osS" id="rq6-sy-CZ2"/>
                         <outlet property="toDoCountLabel" destination="5ff-gg-D3l" id="p2i-BS-f9p"/>
@@ -141,14 +154,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="818" y="4"/>
+            <point key="canvasLocation" x="817.55725190839689" y="3.5211267605633805"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r1K-t5-zQk">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JvR-1O-D7g" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" largeTitles="YES" id="Y6n-Fc-lLR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="Y6n-Fc-lLR">
                         <rect key="frame" x="0.0" y="118" width="393" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -166,11 +179,11 @@
             <objects>
                 <viewController id="mj2-Qo-aXq" customClass="ToDoDetailsViewController" customModule="ToDoListApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PsV-pE-5Yu">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="690"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cYX-Ik-eBo">
-                                <rect key="frame" x="0.0" y="162" width="393" height="622"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="622"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZh-bD-iGk">
                                         <rect key="frame" x="16" y="93" width="361" height="250"/>
