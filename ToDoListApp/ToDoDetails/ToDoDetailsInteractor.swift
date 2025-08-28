@@ -33,12 +33,31 @@ class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
     }
     
     func showTodoDetails() {
-        guard let todo = todo else { return }
-        let dataStore = ToDoDetailsDataStore(
-            todoTitle: todo.title ?? "",
-            todoBody: todo.body ?? "",
-            todoDate: todo.date ?? "00/00/00"
-        )
-        presenter?.receiveToDoDetails(with: dataStore)
+        if let todo = todo {
+            let dataStore = ToDoDetailsDataStore(
+                todoTitle: todo.title ?? "",
+                todoBody: todo.body ?? "",
+                todoDate: todo.date ?? "00/00/00"
+            )
+            presenter?.receiveToDoDetails(with: dataStore)
+        } else {
+            let currentDate = generateCurrentDate()
+            let dataStore = ToDoDetailsDataStore(
+                todoTitle: "",
+                todoBody: "",
+                todoDate: currentDate
+            )
+            presenter?.receiveToDoDetails(with: dataStore)
+        }
+    }
+}
+
+//MARK: - Private Methods
+extension ToDoDetailsInteractor {
+    private func generateCurrentDate() -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter.string(from: date)
     }
 }
