@@ -18,7 +18,7 @@ protocol ToDoListViewInputProtocol: AnyObject {
 protocol ToDoListViewOutputProtocol {
     init(view: ToDoListViewInputProtocol)
     func viewDidLoad()
-    func didTapCell(at indexPath: IndexPath)
+    func didSelectTodo(at indexPath: IndexPath)
     func didTapAddButton()
     func deleteTodo(at indexPath: IndexPath)
     func didDeleteTodo(at indexPath: IndexPath)
@@ -120,7 +120,7 @@ extension ToDoListViewController: UITableViewDataSource {
 extension ToDoListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        presenter.didTapCell(at: indexPath)
+        presenter.didSelectTodo(at: indexPath)
         view.endEditing(true)
     }
     
@@ -128,7 +128,7 @@ extension ToDoListViewController: UITableViewDelegate {
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             
             let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { [weak self] _ in
-                self?.presenter.didTapCell(at: indexPath)
+                self?.presenter.didSelectTodo(at: indexPath)
             }
             
             let shareAction = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { _ in }

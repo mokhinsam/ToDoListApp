@@ -27,7 +27,7 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
         interactor.fetchTodos()
     }
     
-    func didTapCell(at indexPath: IndexPath) {
+    func didSelectTodo(at indexPath: IndexPath) {
         guard let todo = dataStore?.todos[indexPath.row] else { return }
         router.openToDoDetailsViewController(with: todo)
     }
