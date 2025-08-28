@@ -9,10 +9,12 @@ import Foundation
 protocol ToDoListInteractorInputProtocol {
     init(presenter: ToDoListInteractorOutputProtocol)
     func fetchTodos()
+    func deleteTodo(_ todo: CDTodo, at indexPath: IndexPath)
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
     func todosDidReceive(with dataStore: ToDoListDataStore)
+    func didDeleteTodo(at indexPath: IndexPath)
 }
 
 class ToDoListInteractor: ToDoListInteractorInputProtocol {
@@ -39,6 +41,14 @@ class ToDoListInteractor: ToDoListInteractorInputProtocol {
         }
     }
     
+    func deleteTodo(_ todo: CDTodo, at indexPath: IndexPath) {
+        StorageManager.shared.delete(todo)
+        presenter?.didDeleteTodo(at: indexPath)
+    }
+}
+
+//MARK: - Private Methods
+extension ToDoListInteractor {
     private func fetchTodosInDataBase() {
         StorageManager.shared.readTodos { [weak self] result in
             switch result {

@@ -11,6 +11,7 @@ protocol ToDoListViewInputProtocol: AnyObject {
     func reloadData(for section: ToDoSectionViewModel)
     func reloadRow(at indexPath: IndexPath, with viewModel: ToDoCellViewModel)
     func insertRow(at indexPath: IndexPath, with viewModel: ToDoCellViewModel)
+    func deleteRow(at indexPath: IndexPath)
 }
 
 protocol ToDoListViewOutputProtocol {
@@ -18,6 +19,8 @@ protocol ToDoListViewOutputProtocol {
     func viewDidLoad()
     func didTapCell(at indexPath: IndexPath)
     func didTapAddButton()
+    func deleteTodo(at indexPath: IndexPath)
+    func didDeleteTodo(at indexPath: IndexPath)
 }
 
 class ToDoListViewController: UIViewController {
@@ -83,6 +86,23 @@ extension ToDoListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         presenter.didTapCell(at: indexPath)
     }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            
+            let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { [weak self] _ in
+                self?.presenter.didTapCell(at: indexPath)
+            }
+            
+            let shareAction = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { _ in }
+            
+            let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+                self?.presenter.deleteTodo(at: indexPath)
+            }
+            return UIMenu(title: "", children: [editAction, shareAction, deleteAction])
+        }
+        return configuration
+    }
 }
 
 // MARK: - CourseListViewInputProtocol
@@ -101,5 +121,10 @@ extension ToDoListViewController: ToDoListViewInputProtocol {
         sectionViewModel.rows.insert(viewModel, at: indexPath.row)
         tableView.insertRows(at: [indexPath], with: .automatic)
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
+    
+    func deleteRow(at indexPath: IndexPath) {
+        sectionViewModel.rows.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
     }
 }

@@ -81,6 +81,11 @@ class StorageManager {
         }
     }
     
+    func delete(_ todo: CDTodo) {
+         viewContext.delete(todo)
+         saveContext()
+     }
+    
     // MARK: - Core Data Saving support
     func saveContext () {
         if viewContext.hasChanges {

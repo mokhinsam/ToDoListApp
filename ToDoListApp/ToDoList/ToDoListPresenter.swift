@@ -34,6 +34,11 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
     func didTapAddButton() {
         router.openToDoDetailsViewController()
     }
+    
+    func deleteTodo(at indexPath: IndexPath) {
+        guard let todo = dataStore?.todos[indexPath.row] else { return }
+        interactor.deleteTodo(todo, at: indexPath)
+    }
 }
 
 //MARK: - Private Methods
@@ -71,5 +76,10 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
         let section = ToDoSectionViewModel()
         dataStore.todos.forEach { section.rows.append(ToDoCellViewModel(todo: $0)) }
         view?.reloadData(for: section)
+    }
+    
+    func didDeleteTodo(at indexPath: IndexPath) {
+        dataStore?.todos.remove(at: indexPath.row)
+        view?.deleteRow(at: indexPath)
     }
 }
