@@ -37,11 +37,29 @@ class ToDoCell: UITableViewCell, CellModelRepresentable {
     
     private func updateView() {
         guard let viewModel = viewModel as? ToDoCellViewModel else { return }
-        todoTitleLabel.text = viewModel.todoTitle
         todoBodyLabel.text = viewModel.todoBody
         todoDateLabel.text = viewModel.todoDate
         todoDoneButton.tintColor = viewModel.todoCompleted ? .systemYellow : .white
         todoDoneButton.setImage(UIImage(systemName: viewModel.todoDoneButton), for: .normal)
+        todoBodyLabel.textColor = viewModel.todoCompleted ? .lightGray : .white
+        
+        if viewModel.todoCompleted {
+            let attributeString = NSMutableAttributedString(string: viewModel.todoTitle)
+            attributeString.addAttribute(
+                .strikethroughStyle,
+                value: NSUnderlineStyle.single.rawValue,
+                range: NSRange(location: 0, length: attributeString.length)
+            )
+            attributeString.addAttribute(
+                .foregroundColor,
+                value: UIColor.lightGray,
+                range: NSRange(location: 0, length: attributeString.length)
+            )
+            todoTitleLabel.attributedText = attributeString
+        } else {
+            todoTitleLabel.attributedText = NSAttributedString(string: viewModel.todoTitle)
+            todoTitleLabel.textColor = .white
+        }
     }
 }
 
