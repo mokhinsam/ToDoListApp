@@ -29,7 +29,6 @@ class ToDoCell: UITableViewCell, CellModelRepresentable {
             updateView()
         }
     }
-
     
     @IBAction func todoDoneButtonDidPressed() {
         delegate?.didTapDoneButton(in: self)

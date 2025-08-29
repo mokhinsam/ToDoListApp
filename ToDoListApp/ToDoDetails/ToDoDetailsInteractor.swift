@@ -19,7 +19,6 @@ protocol ToDoDetailsInteractorOutputProtocol: AnyObject {
     func receiveToDoDetails(with dataStore: ToDoDetailsDataStore)
 }
 
-
 class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
     
     private weak var presenter: ToDoDetailsInteractorOutputProtocol?
