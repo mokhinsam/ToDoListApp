@@ -23,7 +23,7 @@ protocol ToDoListViewOutputProtocol {
     func deleteTodo(at indexPath: IndexPath)
     func didDeleteTodo(at indexPath: IndexPath)
     func didUpdateSearchText(_ text: String)
-    func didToggleTodoCompletion(at indexPath: IndexPath)
+    func didToggleTodoDone(at indexPath: IndexPath)
 }
 
 class ToDoListViewController: UIViewController {
@@ -176,6 +176,6 @@ extension ToDoListViewController: ToDoListViewInputProtocol {
 extension ToDoListViewController: ToDoCellDelegate {
     func didTapDoneButton(in cell: ToDoCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        presenter.didToggleTodoCompletion(at: indexPath)
+        presenter.didToggleTodoDone(at: indexPath)
     }
 }

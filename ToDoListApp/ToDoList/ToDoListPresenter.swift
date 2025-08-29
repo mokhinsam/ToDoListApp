@@ -48,16 +48,7 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
             interactor.fetchTodos(filter: text)
         }
     }
-    
-    func didToggleTodoCompletion(at indexPath: IndexPath) {
-        guard let todo = dataStore?.todos[indexPath.row] else { return }
-        todo.completed.toggle()
-        StorageManager.shared.saveContext()
-        
-        let updatedViewModel = ToDoCellViewModel(todo: todo)
-        view?.reloadRow(at: indexPath, with: updatedViewModel)
-    }
-    
+
     func didToggleTodoDone(at indexPath: IndexPath) {
         guard let todo = dataStore?.todos[indexPath.row] else { return }
         interactor.toggleTodoDone(for: todo) { [weak self] updatedTodo in
@@ -67,7 +58,6 @@ class ToDoListPresenter: ToDoListViewOutputProtocol {
             }
         }
     }
-
 }
 
 //MARK: - Private Methods
