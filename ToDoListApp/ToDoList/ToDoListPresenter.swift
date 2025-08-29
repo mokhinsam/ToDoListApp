@@ -75,13 +75,17 @@ extension ToDoListPresenter {
         if let updatedTodo = notification.object as? CDTodo {
             if let index = dataStore?.todos.firstIndex(where: { $0.objectID == updatedTodo.objectID }) {
                 dataStore?.todos[index] = updatedTodo
-                let updatedCellVM = ToDoCellViewModel(todo: updatedTodo)
-                view?.reloadRow(at: IndexPath(row: index, section: 0), with: updatedCellVM)
+                DispatchQueue.main.async {
+                    let updatedCellVM = ToDoCellViewModel(todo: updatedTodo)
+                    self.view?.reloadRow(at: IndexPath(row: index, section: 0), with: updatedCellVM)
+                }
             } else {
-                let newCellVM = ToDoCellViewModel(todo: updatedTodo)
-                dataStore?.todos.insert(updatedTodo, at: 0)
-                view?.insertRow(at: IndexPath(row: 0, section: 0), with: newCellVM)
-                view?.updateToDoCountLabel(with: dataStore?.todos.count ?? 0) 
+                DispatchQueue.main.async {
+                    let newCellVM = ToDoCellViewModel(todo: updatedTodo)
+                    self.dataStore?.todos.insert(updatedTodo, at: 0)
+                    self.view?.insertRow(at: IndexPath(row: 0, section: 0), with: newCellVM)
+                    self.view?.updateToDoCountLabel(with: self.dataStore?.todos.count ?? 0)
+                }
             }
         } else {
             interactor.fetchTodos()
@@ -95,13 +99,17 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
         self.dataStore = dataStore
         let section = ToDoSectionViewModel()
         dataStore.todos.forEach { section.rows.append(ToDoCellViewModel(todo: $0)) }
-        view?.reloadData(for: section)
-        view?.updateToDoCountLabel(with: dataStore.todos.count)
+        DispatchQueue.main.async {
+            self.view?.reloadData(for: section)
+            self.view?.updateToDoCountLabel(with: dataStore.todos.count)
+        }
     }
     
     func didDeleteTodo(at indexPath: IndexPath) {
-        dataStore?.todos.remove(at: indexPath.row)
-        view?.deleteRow(at: indexPath)
-        view?.updateToDoCountLabel(with: dataStore?.todos.count ?? 0)
+        DispatchQueue.main.async {
+            self.dataStore?.todos.remove(at: indexPath.row)
+            self.view?.deleteRow(at: indexPath)
+            self.view?.updateToDoCountLabel(with: self.dataStore?.todos.count ?? 0)
+        }
     }
 }
