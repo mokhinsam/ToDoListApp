@@ -54,17 +54,15 @@ class ToDoDetailsInteractor: ToDoDetailsInteractorInputProtocol {
     
     func updateExistingToDo(title: String, body: String) {
         guard let todo = todo else { return }
-        StorageManager.shared.update(todo: todo, newTitle: title, newBody: body)
-        todoDidUpdate(withObject: todo)
+        StorageManager.shared.update(todo: todo, newTitle: title, newBody: body) {
+            self.todoDidUpdate(withObject: todo)
+        }
     }
     
     func createNewToDo(title: String, body: String, date: String) {
-        StorageManager.shared.createNewToDoWith(
-            title: title,
-            body: body,
-            date: date
-        )
-        todoDidUpdate()
+        StorageManager.shared.createNewToDoWith(title: title, body: body, date: date) {
+            self.todoDidUpdate()
+        }
     }
 }
 

@@ -20,22 +20,32 @@ class StorageManager {
         return container
     }()
     
-    private var viewContext: NSManagedObjectContext
+    private let viewContext: NSManagedObjectContext
+    private let backgroundContext: NSManagedObjectContext
     
     private init() {
         viewContext = persistentContainer.viewContext
+        viewContext.automaticallyMergesChangesFromParent = true
+        backgroundContext = persistentContainer.newBackgroundContext()
     }
     
+    // MARK: - CRUD
     func saveTodos(_ todos: [Todo]) {
-        for todo in todos {
-            let cdTodo = CDTodo(context: viewContext)
-            cdTodo.title = todo.todo
-            cdTodo.body = ""
-            cdTodo.date = "01/01/25"
-            cdTodo.createdAt = Date()
-            cdTodo.completed = todo.completed
+        backgroundContext.perform {
+            for todo in todos {
+                let cdTodo = CDTodo(context: self.backgroundContext)
+                cdTodo.title = todo.todo
+                cdTodo.body = ""
+                cdTodo.date = "01/01/25"
+                cdTodo.createdAt = Date()
+                cdTodo.completed = todo.completed
+            }
+            do {
+                try self.backgroundContext.save()
+            } catch {
+                print("Failed to save todos: \(error)")
+            }
         }
-        saveContext()
     }
     
     func fetchTodos(filter: String, completion: @escaping (Result<[CDTodo], Error>) -> Void) {
@@ -43,73 +53,144 @@ class StorageManager {
         if !filter.isEmpty {
             fetchRequest.predicate = NSPredicate(format: "title CONTAINS[cd] %@ OR body CONTAINS[cd] %@", filter, filter)
         }
-        let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         
-        do {
-            let todos = try StorageManager.shared.viewContext.fetch(fetchRequest)
-            completion(.success(todos))
-        } catch {
-            completion(.failure(error))
+        backgroundContext.perform {
+            do {
+                let filteredTodos = try self.backgroundContext.fetch(fetchRequest)
+                let mainContextTodos = self.convertToMainContext(filteredTodos)
+                
+                DispatchQueue.main.async {
+                    completion(.success(mainContextTodos))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
         }
     }
     
-    //MARK: - CRUD
-    func createNewToDoWith(title: String, body: String, date: String) {
-        let newToDo = CDTodo(context: viewContext)
-        newToDo.title = title
-        newToDo.body = body
-        newToDo.date = date
-        newToDo.createdAt = Date()
-        newToDo.completed = false
-        saveContext()
+    func createNewToDoWith(title: String, body: String, date: String, completion: @escaping () -> Void) {
+        backgroundContext.perform {
+            let newToDo = CDTodo(context: self.backgroundContext)
+            newToDo.title = title
+            newToDo.body = body
+            newToDo.date = date
+            newToDo.createdAt = Date()
+            newToDo.completed = false
+            
+            do {
+                try self.backgroundContext.save()
+                DispatchQueue.main.async {
+                    completion()
+                }
+            } catch {
+                print("Failed to save new todo: \(error)")
+                DispatchQueue.main.async {
+                    completion()
+                }
+            }
+        }
     }
     
     func readTodos(completion: @escaping (Result<[CDTodo], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<CDTodo> = CDTodo.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        do {
-            let todos = try viewContext.fetch(fetchRequest)
-            completion(.success(todos))
-        } catch {
-            print("Failed to fetch from CoreData: \(error)")
-            completion(.failure(error))
-        }
-    }
-    
-    func update(todo: CDTodo, newTitle: String, newBody: String) {
-        var didUpdate = false
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         
-        if todo.body != newBody {
-            todo.body = newBody
-            didUpdate = true
-        }
-
-        if todo.title != newTitle {
-            todo.title = newTitle.isEmpty
-            ? "\(todo.body?.prefix(30) ?? "")..."
-            : newTitle
-            didUpdate = true
-        }
-
-        if didUpdate {
-            saveContext()
+        backgroundContext.perform {
+            do {
+                let todos = try self.backgroundContext.fetch(fetchRequest)
+                let mainContextTodos = self.convertToMainContext(todos)
+                
+                DispatchQueue.main.async {
+                    completion(.success(mainContextTodos))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
         }
     }
     
-    func toggleTodoDone(for todo: CDTodo) {
-        todo.completed.toggle()
-        saveContext()
+    func update(todo: CDTodo, newTitle: String, newBody: String, completion: @escaping () -> Void) {
+        backgroundContext.perform {
+            let backgroundTodo = self.backgroundContext.object(with: todo.objectID) as? CDTodo
+            guard let todoToUpdate = backgroundTodo else {
+                DispatchQueue.main.async { completion() }
+                return
+            }
+            
+            var didUpdate = false
+            
+            if todoToUpdate.body != newBody {
+                todoToUpdate.body = newBody
+                didUpdate = true
+            }
+            
+            if todoToUpdate.title != newTitle {
+                todoToUpdate.title = newTitle.isEmpty
+                ? "\(todoToUpdate.body?.prefix(30) ?? "")..."
+                : newTitle
+                didUpdate = true
+            }
+            
+            if didUpdate {
+                do {
+                    try self.backgroundContext.save()
+                } catch {
+                    print("Failed to update todo: \(error)")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
+    }
+    
+    func toggleTodoDone(for todo: CDTodo, completion: @escaping (CDTodo) -> Void) {
+        backgroundContext.perform {
+            guard let backgroundTodo = self.backgroundContext.object(with: todo.objectID) as? CDTodo else {
+                DispatchQueue.main.async {
+                    completion(todo)
+                }
+                return
+            }
+            
+            backgroundTodo.completed.toggle()
+            
+            do {
+                try self.backgroundContext.save()
+            } catch {
+                print("Failed to toggle todo: \(error)")
+            }
+            
+            guard let mainThreadTodo = self.viewContext.object(with: todo.objectID) as? CDTodo else { return }
+    
+            DispatchQueue.main.async {
+                completion(mainThreadTodo)
+            }
+        }
     }
     
     func delete(_ todo: CDTodo) {
-         viewContext.delete(todo)
-         saveContext()
-     }
+        backgroundContext.perform {
+            let backgroundTodo = self.backgroundContext.object(with: todo.objectID)
+            self.backgroundContext.delete(backgroundTodo)
+            
+            do {
+                try self.backgroundContext.save()
+            } catch {
+                print("Failed to delete todo: \(error)")
+            }
+        }
+    }
     
-    // MARK: - Core Data Saving support
-    func saveContext () {
+    // MARK: - Save context helper
+    
+    func saveContext() {
         if viewContext.hasChanges {
             do {
                 try viewContext.save()
@@ -118,5 +199,13 @@ class StorageManager {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+}
+
+//MARK: - Private Methods
+extension StorageManager {
+    private func convertToMainContext(_ todos: [CDTodo]) -> [CDTodo] {
+        let objectIDs = todos.map { $0.objectID }
+        return objectIDs.compactMap { self.viewContext.object(with: $0) as? CDTodo }
     }
 }

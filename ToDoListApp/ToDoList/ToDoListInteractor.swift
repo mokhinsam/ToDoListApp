@@ -61,8 +61,9 @@ class ToDoListInteractor: ToDoListInteractorInputProtocol {
     }
     
     func toggleTodoDone(for todo: CDTodo, completion: @escaping (CDTodo) -> Void) {
-        StorageManager.shared.toggleTodoDone(for: todo)
-        completion(todo)
+        StorageManager.shared.toggleTodoDone(for: todo) { updatedTodo in
+            completion(updatedTodo)
+        }
     }
 }
 
